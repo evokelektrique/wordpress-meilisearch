@@ -1,0 +1,25 @@
+{
+    "name": "evokelektrique/wordpress-meilisearch",
+    "description": "Enhance WordPress search using MeiliSearch for lightning-fast and accurate results.",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "Majid",
+            "email": "majidmohseni3412@gmail.com"
+        }
+    ],
+    "license": "AGPL-3.0-or-later",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Evokelektrique\\WordpressMeilisearch\\": "src/"
+        }
+    },
+    "extra": {
+        "wordpress-plugin": {
+            "version": "0.1",
+            "textdomain": "wordpress-meilisearch",
+            "domain-path": "/languages"
+        }
+    }
+}
