@@ -13,8 +13,12 @@ use Evokelektrique\WordpressMeilisearch\IndexManagement;
         <?php do_settings_sections('wordpress-meilisearch-settings-group'); ?>
         <table class="form-table">
             <tr valign="top">
-                <th scope="row">Public API Key</th>
+                <th scope="row">MeiliSearch Public API Key</th>
                 <td><input type="text" name="meilisearch_public_api_key" value="<?php echo esc_attr(Options::get_option('public_api_key')); ?>" /></td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">MeiliSearch Master API Key</th>
+                <td><input type="text" name="meilisearch_master_api_key" value="<?php echo esc_attr(Options::get_option('master_api_key')); ?>" /></td>
             </tr>
             <tr valign="top">
                 <th scope="row">MeiliSearch Host</th>
@@ -23,6 +27,10 @@ use Evokelektrique\WordpressMeilisearch\IndexManagement;
             <tr valign="top">
                 <th scope="row">MeiliSearch Port</th>
                 <td><input type="text" name="meilisearch_port" value="<?php echo esc_attr(Options::get_option('port')); ?>" /></td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">MeiliSearch Index(Posts)</th>
+                <td><input type="text" name="meilisearch_index_posts" value="<?php echo esc_attr(Options::get_option('index_posts')); ?>" /></td>
             </tr>
         </table>
         <?php submit_button(); ?>

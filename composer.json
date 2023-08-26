@@ -9,7 +9,11 @@
         }
     ],
     "license": "AGPL-3.0-or-later",
-    "require": {},
+    "require": {
+        "meilisearch/meilisearch-php": "^1.3",
+        "guzzlehttp/guzzle": "^7.7",
+        "http-interop/http-factory-guzzle": "^1.0"
+    },
     "autoload": {
         "psr-4": {
             "Evokelektrique\\WordpressMeilisearch\\": "src/"
@@ -20,6 +24,11 @@
             "version": "0.1",
             "textdomain": "wordpress-meilisearch",
             "domain-path": "/languages"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
         }
     }
 }

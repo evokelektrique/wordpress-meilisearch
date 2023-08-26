@@ -24,7 +24,9 @@ class AdminMenu {
 
     public function register_settings() {
         register_setting('wordpress-meilisearch-settings-group', Options::OPTION_PREFIX . 'public_api_key');
+        register_setting('wordpress-meilisearch-settings-group', Options::OPTION_PREFIX . 'master_api_key');
         register_setting('wordpress-meilisearch-settings-group', Options::OPTION_PREFIX . 'host');
         register_setting('wordpress-meilisearch-settings-group', Options::OPTION_PREFIX . 'port');
+        register_setting('wordpress-meilisearch-settings-group', Options::OPTION_PREFIX . 'index_posts');
     }
 }
