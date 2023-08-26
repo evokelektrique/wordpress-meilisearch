@@ -4,6 +4,7 @@ namespace Evokelektrique\WordpressMeilisearch;
 
 use Meilisearch\Client;
 use Meilisearch\Endpoints\Indexes;
+use GuzzleHttp\Client as GuzzleHttpClient;
 
 /**
  * Class IndexManagement
@@ -50,7 +51,13 @@ class IndexManagement {
      * Initializes the MeiliSearch client and index.
      */
     public function __construct() {
-        $this->meili_client = new Client(Options::get_option('host') . ":" . Options::get_option('port'), Options::get_option('master_api_key'));
+        error_log('index management initiated');
+
+        $this->meili_client = new Client(
+            Options::get_option('host') . ":" . Options::get_option('port'), // Host
+            Options::get_option('master_api_key'), // Master API key
+            new GuzzleHttpClient(['timeout' => 60]) // Guzzle http client
+        );
         $this->meili_index = $this->meili_client->index(Options::get_option('index_posts'));
     }
 
@@ -76,14 +83,15 @@ class IndexManagement {
 
             while ($query->have_posts()) {
                 $query->the_post();
-                $posts[] = [
-                    "id" => get_the_ID(),
-                    "title" => get_the_title(),
-                    "image" => get_the_post_thumbnail_url(get_the_ID(), 'full'),
-                    "content" => apply_filters('the_content', get_the_content()),
-                    "author" => get_the_author(),
-                    "publish_date" => get_the_date(),
-                ];
+                $post_data = $this->extract_post_data(get_the_ID());
+
+                if (empty($post_data)) {
+                    // Skip the current iteration and move to the next post
+                    continue;
+                }
+
+                // Add valid post data to the $posts array
+                $posts[] = $post_data;
             }
 
             // Index posts batch to meilisearch
@@ -101,7 +109,53 @@ class IndexManagement {
         error_log('Clear Indexes Background Job Executed: ' . current_time('Y-m-d H:i:s'));
     }
 
-    public function get_indexes() {
+    /**
+     * Adds a post document to the MeiliSearch index.
+     *
+     * @param int $post_id The ID of the post to add.
+     * @return bool True if the document was added successfully, false otherwise.
+     */
+    public function add_document(int $post_id): bool {
+        $post_data = $this->extract_post_data($post_id);
 
+        if (empty($post_data)) {
+            return false; // No data to add, return false
+        }
+
+        $this->meili_index->addDocuments([$post_data]);
+        error_log('Post ID ' . $post_id . ' indexed');
+
+        return true; // Document added successfully
+    }
+
+    /**
+     * Extracts post data for a given post ID.
+     *
+     * @param int $post_id The ID of the post to extract data for.
+     * @return array An array containing the extracted post data.
+     */
+    private function extract_post_data(int $post_id): array {
+        $post = get_post($post_id);
+        $post_data = [];
+
+        // If the post does not exist, return an empty array
+        if (!$post) {
+            return [];
+        }
+
+        // Extract post data
+        $post_data['id']           = $post_id;
+        $post_data['title']        = $post->post_title;
+        $post_data['content']      = $post->post_content;
+        $post_data['author']       = $post->post_author;
+        $post_data['publish_date'] = $post->post_date;
+
+        // Get the full-size thumbnail image URL
+        $thumbnail_url = get_the_post_thumbnail_url($post_id, 'full');
+
+        // Assign the thumbnail URL or an empty string if not available
+        $post_data['image'] = $thumbnail_url ?: '';
+
+        return $post_data;
     }
 }

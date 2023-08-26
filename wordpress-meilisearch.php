@@ -8,15 +8,9 @@ Author: Majid
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Evokelektrique\WordpressMeilisearch\BackgroundJobManagement;
 use Evokelektrique\WordpressMeilisearch\Plugin;
-use Evokelektrique\WordpressMeilisearch\IndexManagement;
 
 $wordpress_meilisearch_plugin = Plugin::get_instance();
-
-// Create instances of BackgroundJobs and IndexManagement classes
-new BackgroundJobManagement();
-new IndexManagement();
 
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'wordpress_meilisearch_settings_link');
 

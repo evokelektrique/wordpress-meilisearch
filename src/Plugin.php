@@ -14,5 +14,8 @@ class Plugin {
 
     public function __construct() {
         new AdminMenu();
+        new BackgroundJobManagement();
+        new IndexManagement();
+        new PostManagement();
     }
 }
