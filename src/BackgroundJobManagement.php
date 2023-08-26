@@ -2,7 +2,7 @@
 
 namespace Evokelektrique\WordpressMeilisearch;
 
-class BackgroundJobs {
+class BackgroundJobManagement {
     const SYNC_EVENT = 'meilisearch_synchronize_event';
     const CLEAR_EVENT = 'meilisearch_clear_indexes_event'; // New event for clearing indexes
     private IndexManagement $indexManagement;
